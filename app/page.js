@@ -7,7 +7,7 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hi! I'm the Headstarter support assistant. How can I help you today?",
+      content: "Hey I'm TechBuddy. What Technical Question Can I Help You With Today?",
     },
   ])
   const [message, setMessage] = useState('')
@@ -88,9 +88,27 @@ export default function Home() {
       alignItems="center"
     >
       <Stack
+        direction={'row'}
+        width = "500px"
+        height = "50px"
+        border = "1px solid black"
+        p = {2}
+        spacing={6}
+      >
+      <Box>
+        Welcome to TechBuddy
+      </Box>
+      <Box>
+        Rating: ___/___
+      </Box>
+      <Button>
+        Username
+      </Button>
+      </Stack>
+      <Stack
         direction={'column'}
         width="500px"
-        height="700px"
+        height="650px"
         border="1px solid black"
         p={2}
         spacing={3}
@@ -128,7 +146,7 @@ export default function Home() {
         <div ref={messagesEndRef} />
         <Stack direction={'row'} spacing={2}>
           <TextField
-            label="Message"
+            label="Enter Your Message"
             fullWidth
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -142,10 +160,15 @@ export default function Home() {
           >
             {isLoading ? 'Sending...' : 'Send'}
           </Button>
+          <Button 
+            variant="contained"
+            //onClick={sendMessage} Used for rating later on
+            >
+            Rate
+          </Button>
         </Stack>
       </Stack>
     </Box>
   )
 }
 
-  
