@@ -17,6 +17,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [avgRating, setAvgRating] = useState(-1);
   const [isRating, setIsRating] = useState(false);
+  const [recentFeedback, setRecentFeedback] = useState([]);
 
   const sendMessage = async () => {
     if (!message.trim()) return; // Don't send empty messages
@@ -97,8 +98,25 @@ export default function Home() {
       console.error("Error getting data:", error);
     }
   };
+  
+  const getFeedback = async () => {
+    try {
+      const response = await fetch("/api/getFeedback", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setRecentFeedback(data.result);
+    } catch (error) {
+      console.error("Error getting data:", error);
+    }
+  };
+
   useEffect(() => {
     getRating();
+    getFeedback();
     scrollToBottom();
   }, [messages]);
 
@@ -107,10 +125,11 @@ export default function Home() {
       width="100vw"
       height="100vh"
       display="flex"
-      flexDirection="column"
+      flexDirection="row"
       justifyContent="space-evenly"
       alignItems="center"
     >
+      <div>
       <Stack
         direction={"row"}
         width="500px"
@@ -186,13 +205,41 @@ export default function Home() {
           </Button>
         </Stack>
       </Stack>
+      
+      </div>
+      <div>
+      
+      Past feedback:
+      {
+        recentFeedback.map((feedback, id) => (
+          <Box
+            display="flex"
+            flexDirection="row"
+            width="30vw"
+            justifyContent="space-between"
+            sx={{
+              border: '1px solid black', // Adds a black border
+              padding: 2,                // Optional padding for spacing inside the box
+              // Additional styling as needed
+            }}
+            key={id}
+        >
+            <span><b>Name:</b> {feedback.name}</span>
+            <span><b>Feedback:</b> {feedback.feedback}</span>
+          </Box>
+
+        ))
+      }
+        
       {
         isRating && 
         <RatingForm setOpened={() => {
           setIsRating(false);
           getRating();
+          getFeedback();
         }}/>
       }
+      </div>
     </Box>
   );
 }
